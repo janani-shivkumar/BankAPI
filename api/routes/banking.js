@@ -11,7 +11,7 @@ const pool = new Pool({
 
 const router = express.Router();
 
-router.get('/', checkauth, (request, response, next) => {
+router.get('/', (request, response, next) => {
     pool.query('select * from banks', (err, res) => {
         response.status(200).json({
             message: "From Banking GET method",
@@ -20,7 +20,7 @@ router.get('/', checkauth, (request, response, next) => {
     });
 });
 
-router.post('/', checkauth, (req, res, next) => {
+router.post('/', (req, res, next) => {
     const bank = {
         name: req.body.name,
         id: req.body.id
@@ -42,7 +42,7 @@ router.post('/', checkauth, (req, res, next) => {
     
 });
 
-router.get('/:bankId', checkauth, (req, res, next) => {
+router.get('/:bankId', (req, res, next) => {
     const id = req.params.bankId;
     pool.query('select * from banks where id = $1', [id], (err, results) => {
         if(results["rows"][0])
@@ -59,7 +59,7 @@ router.get('/:bankId', checkauth, (req, res, next) => {
     })
 });
 
-router.delete('/:bankId', checkauth, (req, res, next) => {
+router.delete('/:bankId', (req, res, next) => {
     const id = req.params.bankId;
 
     pool.query('DELETE FROM banks WHERE id = $1', [id], (err, results) => {
@@ -73,7 +73,7 @@ router.delete('/:bankId', checkauth, (req, res, next) => {
     
 });
 
-router.patch('/:bankId', checkauth, (req, res, next) => {
+router.patch('/:bankId', (req, res, next) => {
     const id = req.params.bankId;
     const {name} = req.body
 
