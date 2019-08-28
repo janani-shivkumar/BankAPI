@@ -73,10 +73,10 @@ router.post('/', (req, res, next) => {
 router.get('/:bankId', (req, res, next) => {
     const id = req.params.bankId;
     pool.query('select * from banks where id = $1', [id], (err, results) => {
-        if(results["rows"][0])
+        if(results)
         {
             res.status(200).json({
-                bankName: results["rows"]
+                bankName: results
             })
         }
         else{
