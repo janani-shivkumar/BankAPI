@@ -74,7 +74,7 @@ router.get('/:bankId', (req, res, next) => {
     const id = req.params.bankId;
     client.query('select * from banks where id = $1', [id], (err, results) => {
         res.status(200).json({
-            Results: results
+            Results: results["rows"]
         })
     //     if(results)
     //     {
