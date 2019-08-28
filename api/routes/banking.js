@@ -53,7 +53,7 @@ router.post('/', (req, res, next) => {
         name: req.body.name,
         id: req.body.id
     }
-    pool.query('INSERT INTO banks (name, id) VALUES ($1, $2)', [bank.name, bank.id], (err, results) => {
+    client.query('INSERT INTO banks (name, id) VALUES ($1, $2)', [bank.name, bank.id], (err, results) => {
         if(results)
         {
             res.status(200).json({
@@ -93,7 +93,7 @@ router.get('/:bankId', (req, res, next) => {
 router.delete('/:bankId', (req, res, next) => {
     const id = req.params.bankId;
 
-    pool.query('DELETE FROM banks WHERE id = $1', [id], (err, results) => {
+    client.query('DELETE FROM banks WHERE id = $1', [id], (err, results) => {
         if(results)
         {
             res.status(200).json({
@@ -108,8 +108,8 @@ router.patch('/:bankId', (req, res, next) => {
     const id = req.params.bankId;
     const {name} = req.body
 
-    pool.query('UPDATE banks SET name = $1 where id = $2', [name, id], (err, results) => {
-        if(results['rowCount'] == 1)
+    client.query('UPDATE banks SET name = $1 where id = $2', [name, id], (err, results) => {
+        if(results['rowCount'])
         {
             res.status(200).json({
                 // UpdatedBankDetails: results,
