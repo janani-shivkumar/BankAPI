@@ -1,12 +1,4 @@
-curl -X POST  
-  http://localhost:3000/users/login 
-  -H 'Content-Type: application/json' 
-  -H 'Postman-Token: e1082ec4-1c38-46b7-81b5-d37f89161c99' 
-  -H 'cache-control: no-cache' 
-  -d '{
-	"emailid": "jan123@gmail.com",
-	"password": "admin123"
-}'
+curl -X POST https://rocky-ocean-39985.herokuapp.com/users/login -H 'Content-Type: application/json' -d '{"emailid": "jan@gmail.com","password": "admin123"}'
 
 curl -X GET 
   http://localhost:3000/banking/ 

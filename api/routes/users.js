@@ -58,7 +58,7 @@ router.post('/login', (req, res, err) => {
     email = req.body.emailid
     pwd = req.body.password
     pool.query('SELECT * FROM users_tbl WHERE emailid = $1',[email], (err, results) => {
-        if(results["rowCount"])
+        if(results)
         {
             // console.log(results)
             if(results["rows"][0]["password"] == pwd)
