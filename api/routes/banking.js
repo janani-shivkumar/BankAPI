@@ -11,11 +11,32 @@ const pool = new Pool({
 
 const router = express.Router();
 
-router.get('/', (request, response, next) => {
-    pool.query('select * from banks', (err, res) => {
+router.get('/', (req, res, next) => {
+
+    var pg = require('pg');
+
+    var conString = process.env.DATABASE_URL || "postgres://mofuiknrtdlrju:129dd1ed50a736ae395a2b4d13f6c98317628b9def66e9beaf15e8c2008bc32e@ec2-23-21-91-183.compute-1.amazonaws.com:5432/d4iq9173sc9hqf";
+    var client = new pg.Client(conString);
+
+    client.connect();
+
+    // var query = client.query("select * from banks");
+
+    // query.on("row", function (row, result) { 
+    //     result.addRow(row); 
+    // });
+
+    // query.on("end", function (result) {          
+    //     client.end();
+    //     res.writeHead(200, {'Content-Type': 'text/plain'});
+    //     res.write(JSON.stringify(result.rows, null, "    ") + "\n");
+    //     res.end();  
+    // });
+
+    client.query('select * from banks', (err, result) => {
         response.status(200).json({
             message: "From Banking GET method",
-            BankDetails: res
+            BankDetails: result
         });
     });
 });
