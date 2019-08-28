@@ -34,11 +34,18 @@ router.get('/', (req, res, next) => {
     // });
 
     client.query('select * from banks', (err, result) => {
-        response.status(200).json({
+        res.status(200).json({
             message: "From Banking GET method",
             BankDetails: result
         });
     });
+
+    // pool.query('select * from banks', (err, res) => {
+    //     response.status(200).json({
+    //         message: "From Banking GET method",
+    //         BankDetails: res
+    //     });
+    // });
 });
 
 router.post('/', (req, res, next) => {
