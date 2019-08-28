@@ -10,9 +10,15 @@ const pool = new Pool({
 })
 
 const router = express.Router();
+var pg = require('pg');
+
+var conString = process.env.DATABASE_URL || "postgres://mofuiknrtdlrju:129dd1ed50a736ae395a2b4d13f6c98317628b9def66e9beaf15e8c2008bc32e@ec2-23-21-91-183.compute-1.amazonaws.com:5432/d4iq9173sc9hqf";
+var client = new pg.Client(conString);
+
+client.connect();
 
 router.get('/', checkauth, (request, response, next) => {
-    pool.query('select * from branches', (err, res) => {
+    client.query('select * from branches', (err, res) => {
         response.status(200).json({
             message: "From Banking GET method",
             BankDetails: res["rows"]
@@ -22,7 +28,7 @@ router.get('/', checkauth, (request, response, next) => {
 
 router.post('/', checkauth, (req, res, next) => {
     const {ifsc, bank_id, branch, address, city, district, state} = req.body
-    pool.query('INSERT INTO branches (name, id) VALUES ($1, $2, $3, $4, $5, $6, $7)', [ifsc, bank_id, branch, address, city, district, state], (err, results) => {
+    client.query('INSERT INTO branches (name, id) VALUES ($1, $2, $3, $4, $5, $6, $7)', [ifsc, bank_id, branch, address, city, district, state], (err, results) => {
         if(results["rowCount"]==1)
         {
             res.status(200).json({
@@ -41,7 +47,7 @@ router.post('/', checkauth, (req, res, next) => {
 
 router.get('/:ifsc', checkauth, (req, res, next) => {
     const ifsc = req.params.ifsc;
-    pool.query(' SELECT ID, NAME FROM BANKS INNER JOIN BRANCHES ON BANKS.ID = BRANCHES.BANK_ID AND BRANCHES.IFSC = $1', [ifsc], (err, results) => {
+    client.query(' SELECT ID, NAME FROM BANKS INNER JOIN BRANCHES ON BANKS.ID = BRANCHES.BANK_ID AND BRANCHES.IFSC = $1', [ifsc], (err, results) => {
         if(results)
         {
             res.status(200).json({
@@ -61,7 +67,7 @@ router.get('/:city/:name', checkauth, (req, res, next) => {
     const name = req.body.name;
     const city = req.body.city;
     // SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = 'ABHYUDAYA COOPERATIVE BANK LIMITED' AND BRANCHES.CITY = 'MUMBAI';
-    pool.query(' SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = $1 AND BRANCHES.CITY = $2', [name, city], (err, results) => {
+    client.query(' SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = $1 AND BRANCHES.CITY = $2', [name, city], (err, results) => {
         res.status(200).json({
             err: err,
             res: results["rows"]
