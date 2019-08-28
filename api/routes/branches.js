@@ -1,13 +1,13 @@
 const express = require('express');
 const checkauth = require('../middleware/check-auth')
 const Pool = require('pg').Pool
-const pool = new Pool({
-    user: 'js025093',
-    host: 'localhost',
-    database: 'BANK',
-    password: 'janani',
-    port: 5432
-})
+// const pool = new Pool({
+//     user: 'js025093',
+//     host: 'localhost',
+//     database: 'BANK',
+//     password: 'janani',
+//     port: 5432
+// })
 
 const router = express.Router();
 var pg = require('pg');
@@ -17,7 +17,7 @@ var client = new pg.Client(conString);
 
 client.connect();
 
-router.get('/', checkauth, (request, response, next) => {
+router.get('/', (request, response, next) => {
     client.query('select * from branches', (err, res) => {
         response.status(200).json({
             message: "From Banking GET method",
