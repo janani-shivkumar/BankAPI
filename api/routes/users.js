@@ -19,12 +19,11 @@ var client = new pg.Client(conString);
 client.connect();
 
 router.get('/tb', (req, res, err) => {
-    client.query('CREATE TABLE users_tbl (emailid character varying(49), id bigint NOT NULL, password character varying(50))', (err, results))
-    {
+    client.query('CREATE TABLE users_tbl (emailid character varying(49), id bigint NOT NULL, password character varying(50))', (err, results) => {
         res.status(200).json({
             done: results
         })
-    }
+    })
 })
     
 
