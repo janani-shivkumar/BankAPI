@@ -18,14 +18,13 @@ var client = new pg.Client(conString);
 
 client.connect();
 
-router.get('/tb', (req, res, err) => {
-    client.query('CREATE TABLE users_tbl (emailid character varying(49), id bigint NOT NULL, password character varying(50))', (err, results) => {
-        res.status(200).json({
-            done: results
-        })
-    })
-})
-    
+// router.get('/tb', (req, res, err) => {
+//     client.query('CREATE TABLE users_tbl (emailid character varying(49), id bigint NOT NULL, password character varying(50))', (err, results) => {
+//         res.status(200).json({
+//             done: results
+//         })
+//     })
+// }) 
 
 router.post('/signup', (req, res, next) => {
     const user = {
@@ -60,30 +59,26 @@ router.post('/login', (req, res, err) => {
     client.query('SELECT * FROM users_tbl WHERE emailid = $1',[email], (err, results) => {
         if(results)
         {
-            res.status(200).json({
-                done: results
-            })
-            // console.log(results)
-            // if(results["rows"][0]["password"] == pwd)
-            // {
-            //     const token = jwt.sign({
-            //         email: results["rows"]["emailid"],
-            //         id: results["rows"]["id"]
-            //     },  process.env.JWT_KEY,
-            //     {
-            //         expiresIn: "120h"
-            //     })
-            //     res.status(200).json({
-            //         message: "User logged in!",
-            //         UserDetails: results["rows"],
-            //         token: token
-            //     })
-            // }
-            // else{
-            //     res.status(404).json({
-            //         message: "Entered wrong password!"
-            //     })
-            // }
+            if(results["rows"][0]["password"] == pwd)
+            {
+                const token = jwt.sign({
+                    email: results["rows"]["emailid"],
+                    id: results["rows"]["id"]
+                },  process.env.JWT_KEY,
+                {
+                    expiresIn: "120h"
+                })
+                res.status(200).json({
+                    message: "User logged in!",
+                    UserDetails: results["rows"],
+                    token: token
+                })
+            }
+            else{
+                res.status(404).json({
+                    message: "Entered wrong password!"
+                })
+            }
         }
         else{
             res.status(404).json({
