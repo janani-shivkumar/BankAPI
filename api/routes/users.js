@@ -42,8 +42,8 @@ router.post('/signup', (req, res, next) => {
             })
         }
         else{
-            pool.query('INSERT INTO users_tbl (emailid, id, password) VALUES ($1, $2, $3)', [user.emailid, user.id, user.password], (err, results) => {
-                if(results["rowCount"]== 1)
+            client.query('INSERT INTO users_tbl (emailid, id, password) VALUES ($1, $2, $3)', [user.emailid, user.id, user.password], (err, results) => {
+                if(results)
                 {
                     res.status(200).json({
                         message: "User Added"
@@ -57,30 +57,33 @@ router.post('/signup', (req, res, next) => {
 router.post('/login', (req, res, err) => {
     email = req.body.emailid
     pwd = req.body.password
-    pool.query('SELECT * FROM users_tbl WHERE emailid = $1',[email], (err, results) => {
+    client.query('SELECT * FROM users_tbl WHERE emailid = $1',[email], (err, results) => {
         if(results)
         {
+            res.status(200).json({
+                done: results
+            })
             // console.log(results)
-            if(results["rows"][0]["password"] == pwd)
-            {
-                const token = jwt.sign({
-                    email: results["rows"]["emailid"],
-                    id: results["rows"]["id"]
-                },  process.env.JWT_KEY,
-                {
-                    expiresIn: "120h"
-                })
-                res.status(200).json({
-                    message: "User logged in!",
-                    UserDetails: results["rows"],
-                    token: token
-                })
-            }
-            else{
-                res.status(404).json({
-                    message: "Entered wrong password!"
-                })
-            }
+            // if(results["rows"][0]["password"] == pwd)
+            // {
+            //     const token = jwt.sign({
+            //         email: results["rows"]["emailid"],
+            //         id: results["rows"]["id"]
+            //     },  process.env.JWT_KEY,
+            //     {
+            //         expiresIn: "120h"
+            //     })
+            //     res.status(200).json({
+            //         message: "User logged in!",
+            //         UserDetails: results["rows"],
+            //         token: token
+            //     })
+            // }
+            // else{
+            //     res.status(404).json({
+            //         message: "Entered wrong password!"
+            //     })
+            // }
         }
         else{
             res.status(404).json({
@@ -92,7 +95,7 @@ router.post('/login', (req, res, err) => {
 
 router.delete('/:id', (req, res, err) => {
     id = req.body.id
-    pool.query('DELETE FROM users_tbl WHERE id = $1', [id], (err, results) => {
+    client.query('DELETE FROM users_tbl WHERE id = $1', [id], (err, results) => {
         if(results)
         {
             res.status(200).json({
