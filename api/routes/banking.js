@@ -39,6 +39,13 @@ router.get('/', (req, res, next) => {
             BankDetails: result
         });
     });
+
+    // pool.query('select * from banks', (err, res) => {
+    //     response.status(200).json({
+    //         message: "From Banking GET method",
+    //         BankDetails: res
+    //     });
+    // });
 });
 
 router.post('/', (req, res, next) => {
