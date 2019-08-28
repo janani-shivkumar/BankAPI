@@ -87,7 +87,7 @@ router.get('/:bankId', (req, res, next) => {
     //             message: "No details for bank with ID - " + id
     //         })
     //     }
-    // })
+    })
 });
 
 router.delete('/:bankId', (req, res, next) => {
