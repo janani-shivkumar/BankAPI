@@ -11,6 +11,22 @@ const pool = new Pool({
 })
 
 const router = express.Router();
+var pg = require('pg');
+
+var conString = process.env.DATABASE_URL || "postgres://mofuiknrtdlrju:129dd1ed50a736ae395a2b4d13f6c98317628b9def66e9beaf15e8c2008bc32e@ec2-23-21-91-183.compute-1.amazonaws.com:5432/d4iq9173sc9hqf";
+var client = new pg.Client(conString);
+
+client.connect();
+
+// router.get('/tb', (req, res, err) => {
+//     client.query('CREATE TABLE users_tbl (emailid character varying(49), id bigint NOT NULL, password character varying(50))', (err, results))
+//     {
+//         res.status(200).json({
+//             done: results
+//         })
+//     }
+// })
+    
 
 router.post('/signup', (req, res, next) => {
     const user = {
@@ -19,7 +35,7 @@ router.post('/signup', (req, res, next) => {
         id: req.body.id
     }
 
-    pool.query('SELECT * FROM users_tbl WHERE emailid = $1', [user.emailid], (err, results) => {
+    client.query('SELECT * FROM users_tbl WHERE emailid = $1', [user.emailid], (err, results) => {
         if(results["rowCount"])
         {
             res.status(200).json({
