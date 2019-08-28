@@ -11,7 +11,7 @@ const pool = new Pool({
 
 const router = express.Router();
 
-router.get('/', checkauth, (request, response, next) => {
+router.get('/', (request, response, next) => {
     pool.query('select * from banks', (err, res) => {
         response.status(200).json({
             message: "From Banking GET method",
