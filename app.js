@@ -48,6 +48,9 @@ app.use('/users', userRoutes);
 app.use('/setLimitOffset', router.post('/', (req, res, err) => {
     global.limit = req.params.limit
     global.offset = req.params.offset
+    res.status(200).json({
+        msg: 'Done!'
+    })
 }))
 
 app.use((req, res, next) => {
