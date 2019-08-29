@@ -48,7 +48,7 @@ router.get('/', (req, res, next) => {
     // });
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', checkauth, (req, res, next) => {
     const bank = {
         name: req.body.name,
         id: req.body.id
@@ -90,7 +90,7 @@ router.get('/:bankId', (req, res, next) => {
     })
 });
 
-router.delete('/:bankId', (req, res, next) => {
+router.delete('/:bankId', checkauth, (req, res, next) => {
     const id = req.params.bankId;
 
     client.query('DELETE FROM banks WHERE id = $1', [id], (err, results) => {

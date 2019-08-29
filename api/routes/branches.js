@@ -45,7 +45,7 @@ router.post('/', checkauth, (req, res, next) => {
     
 });
 
-router.get('/:ifsc', (req, res, next) => {
+router.get('/:ifsc', checkauth, (req, res, next) => {
     const ifsc = req.params.ifsc;
     client.query(' SELECT ID, NAME FROM BANKS INNER JOIN BRANCHES ON BANKS.ID = BRANCHES.BANK_ID AND BRANCHES.IFSC = $1', [ifsc], (err, results) => {
         if(results)
@@ -63,7 +63,7 @@ router.get('/:ifsc', (req, res, next) => {
 });
 
 
-router.get('/:city/:name', (req, res, next) => {
+router.get('/:city/:name', checkauth, (req, res, next) => {
     const name = req.params.name;
     const city = req.params.city;
     // SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = 'ABHYUDAYA COOPERATIVE BANK LIMITED' AND BRANCHES.CITY = 'MUMBAI';
