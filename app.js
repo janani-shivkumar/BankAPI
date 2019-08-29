@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan')
 const app = express()
 const bodyparser = require('body-parser')
+const router = express.Router();
 
 const bankingRoutes = require('./api/routes/banking');
 const branchRoutes = require('./api/routes/branches');
@@ -21,6 +22,12 @@ app.use((req, res, next) => {
     }
     next();
 });
+
+app.use('/', router.get('', (req, res, next) => {
+    res.status(200).json({
+        message: "Welcome to Home page!"
+    })
+}))
 
 app.use('/banking', bankingRoutes);
 app.use('/branches', branchRoutes);
