@@ -64,8 +64,8 @@ router.get('/:ifsc', (req, res, next) => {
 
 
 router.get('/:city/:name', (req, res, next) => {
-    const name = req.body.name;
-    const city = req.body.city;
+    const name = req.params.name;
+    const city = req.params.city;
     // SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = 'ABHYUDAYA COOPERATIVE BANK LIMITED' AND BRANCHES.CITY = 'MUMBAI';
     client.query(' SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = $1 AND BRANCHES.CITY = $2', [name, city], (err, results) => {
         res.status(200).json({
