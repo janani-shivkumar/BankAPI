@@ -19,8 +19,12 @@ const router = express.Router();
 //     client.end()
 // });
 
-global.limit = 4
-global.offset = 4
+var pg = require('pg');
+
+var conString = process.env.DATABASE_URL || "postgres://mofuiknrtdlrju:129dd1ed50a736ae395a2b4d13f6c98317628b9def66e9beaf15e8c2008bc32e@ec2-23-21-91-183.compute-1.amazonaws.com:5432/d4iq9173sc9hqf";
+var client = new pg.Client(conString);
+
+client.connect();
 
 const bankingRoutes = require('./api/routes/banking');
 const branchRoutes = require('./api/routes/branches');
@@ -46,10 +50,10 @@ app.use('/branches', branchRoutes);
 app.use('/users', userRoutes);
 
 app.use('/setLimitOffset', router.post('/', (req, res, err) => {
-    global.limit = req.params.limit
-    global.offset = req.params.offset
-    res.status(200).json({
-        msg: 'Done!'
+    client.query('CREATE TABLE admin_settings ( id bigint NOT NULL, offset bigint NOT NULL, limit bigint NOT NULL );', (err, result) => {
+        res.status(200).json({
+            done: result
+        })
     })
 }))
 
