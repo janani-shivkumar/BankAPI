@@ -17,11 +17,6 @@ var client = new pg.Client(conString);
 
 client.connect();
 
-client.query('SELECT * FROM settings WHERE id = 1', (err, results) => {
-    global.limit = results["rows"]["plimit"]
-    global.offset = results["rows"]["poffset"]
-})
-
 router.get('/', (request, response, next) => {
     client.query('select * from branches', (err, res) => {
         response.status(200).json({
@@ -72,14 +67,16 @@ router.get('/:city/:name', checkauth, (req, res, next) => {
     const name = req.params.name;
     const city = req.params.city;
     // SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = 'ABHYUDAYA COOPERATIVE BANK LIMITED' AND BRANCHES.CITY = 'MUMBAI';
-    client.query('SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = $1 AND BRANCHES.CITY = $2 ORDER BY BANKS.ID OFFSET $3 LIMIT $4', [name, city, global.offset, global.limit], (err, results) => {
-        res.status(200).json({
-            err: err,
-            params: global.limit,  
-            off: global.offset,
-            res: results["rows"]
+    client.query('SELECT * FROM settings WHERE id = 1', (err, res1) => {
+        client.query('SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = $1 AND BRANCHES.CITY = $2 ORDER BY BANKS.ID OFFSET $3 LIMIT $4', [name, city, res1["rows"]["poffset"], res1["rows"]["plimit"]], (err, results) => {
+            res.status(200).json({
+                err: err,
+                params: res1["rows"]["plimit"], 
+                off: res1["rows"]["poffset"],
+                res: results["rows"]
+            })
         })
-    })
+    }) 
 })
 
 module.exports = router;
