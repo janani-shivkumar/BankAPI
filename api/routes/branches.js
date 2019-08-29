@@ -75,8 +75,6 @@ router.get('/:city/:name', checkauth, (req, res, next) => {
         client.query('SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = $1 AND BRANCHES.CITY = $2 ORDER BY BANKS.ID OFFSET $3 LIMIT $4', [name, city, process.env.poffset, process.env.plimit], (err, results) => {
             res.status(200).json({
                 err: err,
-                params: process.env.plimit, 
-                off: process.env.poffset,
                 done: results["rows"]
             })
         })
