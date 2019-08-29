@@ -19,8 +19,8 @@ const router = express.Router();
 //     client.end()
 // });
 
-global.limit = 0
-global.offset = 0
+global.limit = 4
+global.offset = 4
 
 const bankingRoutes = require('./api/routes/banking');
 const branchRoutes = require('./api/routes/branches');
