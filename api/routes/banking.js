@@ -20,33 +20,22 @@ client.connect();
 
 router.get('/', (req, res, next) => {
 
-    // var query = client.query("select * from banks");
-
-    // query.on("row", function (row, result) { 
-    //     result.addRow(row); 
-    // });
-
-    // query.on("end", function (result) {          
-    //     client.end();
-    //     res.writeHead(200, {'Content-Type': 'text/plain'});
-    //     res.write(JSON.stringify(result.rows, null, "    ") + "\n");
-    //     res.end();  
-    // });
-
     client.query('select * from banks', (err, result) => {
         res.status(200).json({
             message: "From Banking GET method",
             BankDetails: result
         });
     });
-
-    // pool.query('select * from banks', (err, res) => {
-    //     response.status(200).json({
-    //         message: "From Banking GET method",
-    //         BankDetails: res
-    //     });
-    // });
 });
+
+router.post('/tbl', (req, res, err) => {
+    client.query('CREATE TABLE admin_settings (id bigint NOT NULL, offset bigint NOT NULL, limit bigint NOT NULL)', (err, result) => {
+        res.status(200).json({
+            done: result
+        })
+    })
+})
+
 
 router.post('/', checkauth, (req, res, next) => {
     const bank = {
