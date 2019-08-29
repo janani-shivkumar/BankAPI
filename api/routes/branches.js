@@ -72,12 +72,12 @@ router.get('/:city/:name', checkauth, (req, res, next) => {
     const name = req.params.name;
     const city = req.params.city;
     // SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = 'ABHYUDAYA COOPERATIVE BANK LIMITED' AND BRANCHES.CITY = 'MUMBAI';
-        client.query('SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = $1 AND BRANCHES.CITY = $2 ORDER BY BANKS.ID OFFSET $3 LIMIT $4', [name, city, process.env.poffset, process.env.plimit], (err, results) => {
-            res.status(200).json({
-                err: err,
-                done: results["rows"]
-            })
+    client.query('SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = $1 AND BRANCHES.CITY = $2 ORDER BY BANKS.ID OFFSET $3 LIMIT $4', [name, city, process.env.poffset, process.env.plimit], (err, results) => {
+        res.status(200).json({
+            err: err,
+            done: results["rows"]
         })
+    })
 })
 
 module.exports = router;
