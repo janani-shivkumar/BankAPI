@@ -75,17 +75,16 @@ router.get('/:ifsc', checkauth, (req, res, next) => {
 router.get('/:city/:name', checkauth, (req, res, next) => {
     const name = req.params.name;
     const city = req.params.city;
-    res.status(200).json({
-        // parseInt(req.params.year, 10);
-        lim: process.env.POFFSET, 
-        off: process.env.PLIMIT
+    // res.status(200).json({
+    //     // parseInt(req.params.year, 10);
+    //     lim: process.env.POFFSET, 
+    //     off: process.env.PLIMIT
+    // SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = 'ABHYUDAYA COOPERATIVE BANK LIMITED' AND BRANCHES.CITY = 'MUMBAI' OFFSET 4 LIMIT 4;
+    client.query('SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = $1 AND BRANCHES.CITY = $2 ORDER BY BANKS.ID', [name, city], (err, results) => {
+        res.status(200).json({
+            message: results["rows"]
+        })
     })
-    // SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = 'ABHYUDAYA COOPERATIVE BANK LIMITED' AND BRANCHES.CITY = 'MUMBAI';
-    // client.query('SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = $1 AND BRANCHES.CITY = $2 ORDER BY BANKS.ID OFFSET $3 LIMIT $4', [name, city, process.env.POFFSET, process.env.PLIMIT], (err, results) => {
-    //     res.status(200).json({
-    //         message: results
-    //     })
-    // })
 })
 
 module.exports = router;
