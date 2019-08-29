@@ -50,7 +50,7 @@ app.use('/branches', branchRoutes);
 app.use('/users', userRoutes);
 
 app.use('/setLimitOffset', router.post('/', (req, res, err) => {
-    client.query('CREATE TABLE admin_settings ( id bigint NOT NULL, offset bigint NOT NULL, limit bigint NOT NULL );', (err, result) => {
+    client.query('CREATE TABLE admin_settings (id bigint NOT NULL, offset bigint NOT NULL, limit bigint NOT NULL)', (err, result) => {
         res.status(200).json({
             done: result
         })
