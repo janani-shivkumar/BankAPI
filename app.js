@@ -2,6 +2,8 @@ const express = require('express');
 const morgan = require('morgan')
 const app = express()
 const bodyparser = require('body-parser')
+const router = express.Router();
+
 // const {Pool, Client} = require('pg')
 
 // const connectionString = 'postgressql://postgres:admin123@localhost:5432/BANK'
@@ -16,6 +18,9 @@ const bodyparser = require('body-parser')
 //     console.log(err, res)
 //     client.end()
 // });
+
+global.limit = 0
+global.offset = 0
 
 const bankingRoutes = require('./api/routes/banking');
 const branchRoutes = require('./api/routes/branches');
@@ -39,6 +44,11 @@ app.use((req, res, next) => {
 app.use('/banking', bankingRoutes);
 app.use('/branches', branchRoutes);
 app.use('/users', userRoutes);
+
+app.use('/setLimitOffset', router.post('/', (req, res, err) => {
+    global.limit = req.params.limit
+    global.offset = req.params.offset
+}))
 
 app.use((req, res, next) => {
     const err = new Error("NOT FOUND");
