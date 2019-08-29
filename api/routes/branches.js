@@ -9,6 +9,10 @@ const Pool = require('pg').Pool
 //     port: 5432
 // })
 
+
+process.env.PLIMIT = 0;
+process.env.POFFSET = 0;
+
 const router = express.Router();
 var pg = require('pg');
 
@@ -18,8 +22,8 @@ var client = new pg.Client(conString);
 client.connect();
 
 client.query('SELECT * FROM settings WHERE id = 1', (err, res) => {
-    process.env.plimit = res["rows"]["plimit"]
-    process.env.poffset = res["rows"]["poffset"]
+    process.env.PLIMIT = res["rows"]["plimit"]
+    process.env.POFFSET = res["rows"]["poffset"]
 })
 
 router.get('/', (request, response, next) => {
@@ -72,10 +76,9 @@ router.get('/:city/:name', checkauth, (req, res, next) => {
     const name = req.params.name;
     const city = req.params.city;
     // SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = 'ABHYUDAYA COOPERATIVE BANK LIMITED' AND BRANCHES.CITY = 'MUMBAI';
-    client.query('SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = $1 AND BRANCHES.CITY = $2 ORDER BY BANKS.ID OFFSET $3 LIMIT $4', [name, city, process.env.poffset, process.env.plimit], (err, results) => {
+    client.query('SELECT * FROM BRANCHES INNER JOIN BANKS ON BANKS.ID = BRANCHES.BANK_ID WHERE BANKS.NAME = $1 AND BRANCHES.CITY = $2 ORDER BY BANKS.ID OFFSET $3 LIMIT $4', [name, city, process.env.POFFSET, process.env.PLIMIT], (err, results) => {
         res.status(200).json({
-            err: err,
-            done: results["rows"]
+            message: results["rows"]
         })
     })
 })
