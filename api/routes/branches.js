@@ -17,6 +17,14 @@ var client = new pg.Client(conString);
 
 client.connect();
 
+router.get('/off', (req, res, next)=>{
+    client.query('SELECT * FROM settings WHERE id = 1', (err, results) => {
+        res.status(200).json({
+            det: results
+        })
+    })
+})
+
 router.get('/', (request, response, next) => {
     client.query('select * from branches', (err, res) => {
         response.status(200).json({
