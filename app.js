@@ -2,29 +2,6 @@ const express = require('express');
 const morgan = require('morgan')
 const app = express()
 const bodyparser = require('body-parser')
-// const router = express.Router();
-
-// const {Pool, Client} = require('pg')
-
-// const connectionString = 'postgressql://postgres:admin123@localhost:5432/BANK'
-
-// const client = new Client({
-//     connectionString:connectionString
-// })
-
-// client.connect()
-
-// client.query('SELECT * from banks', (err, res) => {
-//     console.log(err, res)
-//     client.end()
-// });
-
-// var pg = require('pg');
-
-// var conString = process.env.DATABASE_URL || "postgres://mofuiknrtdlrju:129dd1ed50a736ae395a2b4d13f6c98317628b9def66e9beaf15e8c2008bc32e@ec2-23-21-91-183.compute-1.amazonaws.com:5432/d4iq9173sc9hqf";
-// var client = new pg.Client(conString);
-
-// client.connect();
 
 const bankingRoutes = require('./api/routes/banking');
 const branchRoutes = require('./api/routes/branches');
