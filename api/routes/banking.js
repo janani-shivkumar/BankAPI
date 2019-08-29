@@ -28,15 +28,6 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.post('/tbl', (req, res, err) => {
-    client.query('CREATE TABLE admin_settings (id bigint NOT NULL, offset bigint NOT NULL, limit bigint NOT NULL);', (err, result) => {
-        res.status(200).json({
-            done: result
-        })
-    })
-})
-
-
 router.post('/', checkauth, (req, res, next) => {
     const bank = {
         name: req.body.name,
@@ -65,7 +56,7 @@ router.get('/:bankId', (req, res, next) => {
         res.status(200).json({
             Results: results["rows"]
         })
-    //     if(results)
+    //     if(results["rows"])
     //     {
     //         res.status(200).json({
     //             bankName: results
