@@ -3,6 +3,9 @@ const app = require('./app');
 
 const port = process.env.PORT || 5005;
 
+process.env.plimit = 0;
+process.env.poffset = 0;
+
 const server = http.createServer(app);
 
 server.listen(port);
